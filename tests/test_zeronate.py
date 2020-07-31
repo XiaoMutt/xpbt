@@ -14,3 +14,4 @@ cig = Cigarette(0, 10, z, CIGAR.CODE.M)
 rbit = RedBlackIntervalTree()
 rbit.insert(cig)
 rbit.check()
+cig.cigarCode = CIGAR.CODE.I

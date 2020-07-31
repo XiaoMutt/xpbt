@@ -29,7 +29,7 @@ class CIGAR(metaclass=Frozen):
         return [(int(num), getattr(cls, code)) for num, code in cls.PATTERN.findall(cigar)]
 
 
-class Cigarette(RedBlackIntervalTreeNode):
+class Cigarette(RedBlackIntervalTreeNode, Immutable):
     def __init__(self, start: int, stop: int, zeronate: Zeronate, cigarCode: CIGAR.CODE):
         super(Cigarette, self).__init__(start, stop)
         self.zeronate = zeronate
