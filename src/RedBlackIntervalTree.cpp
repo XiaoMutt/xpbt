@@ -5,32 +5,11 @@
 #include <stdexcept>
 #include "RedBlackIntervalTree.h"
 
-RedBlackIntervalTree::Node::Node(int32_t low, int32_t high) {
-    this->low = low;
-    this->high = high;
-    this->max = high;
 
-    this->left = nullptr;
-    this->right = nullptr;
-    this->parent = nullptr;
-    this->red = true;
-}
 
-void RedBlackIntervalTree::Node::updateMax() {
-    this->max = std::max(this->left == nullptr ? this->high : this->left->max,
-                         this->right == nullptr ? this->high : this->right->max
-    );
-    this->max = std::max(this->max, this->high);
-}
-
-void RedBlackIntervalTree::insert(int32_t low, int32_t high) {
-    Node *z = new Node(low, high);
-    this->insertNode(z);
-}
-
-void RedBlackIntervalTree::insertNode(RedBlackIntervalTree::Node *z) {
-    Node *y = nullptr; // track the parent node;
-    Node *x = this->root; // transverse to find the insertion spot;
+void RedBlackIntervalTree::insert(RedBlackIntervalTreeNode *z) {
+    RedBlackIntervalTreeNode *y = nullptr; // track the parent node;
+    RedBlackIntervalTreeNode *x = this->root; // transverse to find the insertion spot;
     while (x != nullptr) {
         y = x;
         x = (z->low > x->low ? x->right : x->left);
@@ -53,11 +32,11 @@ void RedBlackIntervalTree::insertNode(RedBlackIntervalTree::Node *z) {
 
 }
 
-void RedBlackIntervalTree::insertFixUp(RedBlackIntervalTree::Node *z) {
+void RedBlackIntervalTree::insertFixUp(RedBlackIntervalTreeNode *z) {
     while (z->parent != nullptr && z->parent->red) {
         if (z->parent == z->parent->parent->left) {
             //z's parent is a left node of it's parent
-            Node *y = z->parent->parent->right;
+            RedBlackIntervalTreeNode *y = z->parent->parent->right;
             if (y != nullptr && y->red) {
                 z->parent->red = false;
                 y->red = false;
@@ -75,7 +54,7 @@ void RedBlackIntervalTree::insertFixUp(RedBlackIntervalTree::Node *z) {
             }
         } else {
             //z's parent is a left node of it's parent
-            Node *y = z->parent->parent->left;
+            RedBlackIntervalTreeNode *y = z->parent->parent->left;
             if (y != nullptr && y->red) {
                 z->parent->red = false;
                 y->red = false;
@@ -100,8 +79,8 @@ RedBlackIntervalTree::RedBlackIntervalTree() {
     this->root = nullptr;
 }
 
-void RedBlackIntervalTree::leftRotate(RedBlackIntervalTree::Node *x) {
-    Node *y = x->right;// y must exist. otherwise will not call this function
+void RedBlackIntervalTree::leftRotate(RedBlackIntervalTreeNode *x) {
+    RedBlackIntervalTreeNode *y = x->right;// y must exist. otherwise will not call this function
 
     x->right = y->left;
     if (y->left != nullptr) {
@@ -124,8 +103,8 @@ void RedBlackIntervalTree::leftRotate(RedBlackIntervalTree::Node *x) {
     y->updateMax();
 }
 
-void RedBlackIntervalTree::rightRotate(RedBlackIntervalTree::Node *x) {
-    Node *y = x->left;
+void RedBlackIntervalTree::rightRotate(RedBlackIntervalTreeNode *x) {
+    RedBlackIntervalTreeNode *y = x->left;
 
     x->left = y->right;
     if (y->right != nullptr) {
@@ -148,25 +127,24 @@ void RedBlackIntervalTree::rightRotate(RedBlackIntervalTree::Node *x) {
     y->updateMax();
 }
 
-RedBlackIntervalTree::~RedBlackIntervalTree() {
-    this->destructorHelper(this->root);
-}
+//RedBlackIntervalTree::~RedBlackIntervalTree() {
+//    this->destructorHelper(this->root);
+//}
 
-void RedBlackIntervalTree::destructorHelper(RedBlackIntervalTree::Node *z) {
-    if (z != nullptr) {
-        this->destructorHelper(z->left);
-        this->destructorHelper(z->right);
-        delete z;
-    }
-}
+//void RedBlackIntervalTree::destructorHelper(RedBlackIntervalTreeNode *z) {
+//    if (z != nullptr) {
+//        this->destructorHelper(z->left);
+//        this->destructorHelper(z->right);
+//    }
+//}
 
 void RedBlackIntervalTree::check() {
     int numBlackNode = -1;
     this->checkHelper(this->root, 0, numBlackNode, false);
 }
 
-void RedBlackIntervalTree::checkHelper(RedBlackIntervalTree::Node *z,
-        int counter, int &numBlackNode, bool parentIsRed) {
+void RedBlackIntervalTree::checkHelper(RedBlackIntervalTreeNode *z,
+                                       int counter, int &numBlackNode, bool parentIsRed) {
     if (z == nullptr) {
         // at leaf
         if (numBlackNode < 0) {

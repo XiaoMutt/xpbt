@@ -422,8 +422,8 @@ class RedBlackIntervalTree(object):
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc="The membership flag")
     __repr__ = _swig_repr
 
-    def insert(self, low, high):
-        return _xpbt.RedBlackIntervalTree_insert(self, low, high)
+    def insert(self, z):
+        return _xpbt.RedBlackIntervalTree_insert(self, z)
 
     def check(self):
         return _xpbt.RedBlackIntervalTree_check(self)
@@ -434,6 +434,27 @@ class RedBlackIntervalTree(object):
 
 # Register RedBlackIntervalTree in _xpbt:
 _xpbt.RedBlackIntervalTree_swigregister(RedBlackIntervalTree)
+
+class RedBlackIntervalTreeNode(object):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc="The membership flag")
+    __repr__ = _swig_repr
+    left = property(_xpbt.RedBlackIntervalTreeNode_left_get, _xpbt.RedBlackIntervalTreeNode_left_set)
+    right = property(_xpbt.RedBlackIntervalTreeNode_right_get, _xpbt.RedBlackIntervalTreeNode_right_set)
+    parent = property(_xpbt.RedBlackIntervalTreeNode_parent_get, _xpbt.RedBlackIntervalTreeNode_parent_set)
+    red = property(_xpbt.RedBlackIntervalTreeNode_red_get, _xpbt.RedBlackIntervalTreeNode_red_set)
+    low = property(_xpbt.RedBlackIntervalTreeNode_low_get, _xpbt.RedBlackIntervalTreeNode_low_set)
+    high = property(_xpbt.RedBlackIntervalTreeNode_high_get, _xpbt.RedBlackIntervalTreeNode_high_set)
+    max = property(_xpbt.RedBlackIntervalTreeNode_max_get, _xpbt.RedBlackIntervalTreeNode_max_set)
+
+    def __init__(self, low, high):
+        _xpbt.RedBlackIntervalTreeNode_swiginit(self, _xpbt.new_RedBlackIntervalTreeNode(low, high))
+
+    def updateMax(self):
+        return _xpbt.RedBlackIntervalTreeNode_updateMax(self)
+    __swig_destroy__ = _xpbt.delete_RedBlackIntervalTreeNode
+
+# Register RedBlackIntervalTreeNode in _xpbt:
+_xpbt.RedBlackIntervalTreeNode_swigregister(RedBlackIntervalTreeNode)
 
 class Sequence(object):
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc="The membership flag")

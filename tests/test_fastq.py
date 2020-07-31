@@ -1,7 +1,7 @@
-from xpbt.xpbt import FastQ
-from xpbt.xpbt import FastQIntegrator
-from xpbt.xpbt import ReadStitcher
-from xpbt.py import fastq
+from xpbt import FastQ
+from xpbt import FastQIntegrator
+from xpbt import ReadStitcher
+from xpbt.ngs import fastq
 from unittest import TestCase
 
 

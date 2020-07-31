@@ -1,4 +1,4 @@
-from xpbt.xpbt import RedBlackIntervalTree
+from xpbt import RedBlackIntervalTree
 from random import randint
 from tqdm import tqdm
 

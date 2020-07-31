@@ -1,5 +1,5 @@
 import gzip
-from ..xpbt import FastQ
+from xpbt.core.xpbt import FastQ
 
 
 class Record(FastQ):

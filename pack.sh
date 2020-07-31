@@ -39,7 +39,7 @@ echo "###Build xpbt.i"
 build_xpbt_i src src/xpbt.i
 
 echo "###Create SWIG wrap files..."
-swig -python -c++ -I./src -outdir ./xpbt ./src/xpbt.i
+swig -python -c++ -I./src -outdir ./xpbt/core ./src/xpbt.i
 
 ofiles=() # track o files
 echo "###Compile c++ files..."
@@ -55,8 +55,8 @@ echo "###Compile xpbt cxx file..."
 g++ -fPIC -c -O2 -std=c++11 ./src/xpbt_wrap.cxx -I/usr/include/python3.8 -lstdc++ -o ./tmp/xpbt_wrap.o
 ofiles+=("./tmp/xpbt_wrap.o")
 
-echo "###Pack " "${ofiles[@]}" "into _xpbt.so..."
-g++ -shared "${ofiles[@]}" -o ./xpbt/_xpbt.so
+echo "###Pack " "${ofiles[@]}" "into xpbt/core/_xpbt.so..."
+g++ -shared "${ofiles[@]}" -o ./xpbt/core/_xpbt.so
 
 echo "###Remove tmp files"
 rm -r ./tmp

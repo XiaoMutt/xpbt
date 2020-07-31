@@ -1,5 +1,5 @@
-from xpbt.xpbt import DnaKmerBloomFilter
-from xpbt.xpbt import Sequence
+from xpbt import DnaKmerBloomFilter
+from xpbt import Sequence
 from unittest import TestCase
 import math, os
 

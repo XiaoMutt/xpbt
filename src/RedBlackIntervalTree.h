@@ -5,37 +5,35 @@
 #ifndef XPBT_REDBLACKINTERVALTREE_H
 #define XPBT_REDBLACKINTERVALTREE_H
 
+
+#include "RedBlackIntervalTreeNode.h"
+
 class RedBlackIntervalTree {
-protected:
-    class Node{
-    public:
-        Node* left;
-        Node* right;
-        Node* parent;
 
-        bool red;
-
-        int32_t low;
-        int32_t high;
-        int32_t max;
-        explicit Node(int32_t low, int32_t high);
-        void updateMax();
-    };
-
-    void insertNode(Node *z);
-    void insertFixUp(Node *z);
-    void leftRotate(Node *x);
-    void rightRotate(Node *x);
-
-    void destructorHelper(Node *z);
-    void checkHelper(Node *z, int counter, int &numBlackNode, bool parentIsRed);
-    Node* root;
 public:
-    void insert(int32_t low, int32_t high);
+
+    void insert(RedBlackIntervalTreeNode *z);
+
     void check();
 
     RedBlackIntervalTree();
-    ~RedBlackIntervalTree();
+
+//    ~RedBlackIntervalTree();
+
+protected:
+
+
+    void insertFixUp(RedBlackIntervalTreeNode *z);
+
+    void leftRotate(RedBlackIntervalTreeNode *x);
+
+    void rightRotate(RedBlackIntervalTreeNode *x);
+
+//    void destructorHelper(RedBlackIntervalTreeNode *z);
+
+    void checkHelper(RedBlackIntervalTreeNode *z, int counter, int &numBlackNode, bool parentIsRed);
+
+    RedBlackIntervalTreeNode *root;
 };
 
 

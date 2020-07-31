@@ -1,4 +1,4 @@
-from xpbt.xpbt import Sequence
+from xpbt import Sequence
 
 from unittest import TestCase
 from collections import Counter

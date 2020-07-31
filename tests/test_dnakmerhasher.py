@@ -1,5 +1,5 @@
-from xpbt.xpbt import DnaKmerHasher
-from xpbt.xpbt import Sequence
+from xpbt import DnaKmerHasher
+from xpbt import Sequence
 from unittest import TestCase
 from scipy.stats import chisquare
 import numpy as np
