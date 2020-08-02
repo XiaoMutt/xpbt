@@ -4,7 +4,82 @@ import xpbt.core
 
 
 class FastQIntegrator(xpbt.core.FastQIntegrator):
-    pass
+    def __init__(self):
+        """
+        Combine a collection of FastQs:
+        * pick the base based a the collective phred qualities
+        * update the Phred quality based on bayes updates
+
+        Example:  Unique Molecule Barcodes show that a group of FastQs which are from the same initial DNA molecules.
+        Then these FastQs can be added to the FastQIntegrator, and the initial DNA sequence as well as the sequencing
+        quality can be deduced.
+        """
+        super(FastQIntegrator, self).__init__()
+
+    def add(self, fastq: FastQ) -> None:
+        """
+        Add a FastQ record. The FastQ object is not stored, but the information is extracted for calculation
+        :param fastq:
+        :return: None
+        """
+        super(FastQIntegrator, self).add(fastq)
+
+    def integrate(self, newId: str = "Integrated") -> FastQ:
+        """
+        Integrate the added FastQs to a new FastQ
+        :param newId: the new ID given to the resulted FastQ
+        :return: the integrated FastQ
+        """
+        return super(FastQIntegrator, self).integrate(newId)
+
+    @staticmethod
+    def p2phred(p) -> str:
+        """
+        Convert probability to Phred character
+        :return: Phred character
+        """
+        return FastQIntegrator.p2phred(p)
+
+    @staticmethod
+    def phred2p(c) -> float:
+        """
+        Convert Phred character to probability
+        :param c:
+        :return: probability
+        """
+        return FastQIntegrator.phred2p(c)
+
+    @staticmethod
+    def count2ascii(c) -> str:
+        """
+        Convert base count (an integer) to a character.
+        Mapping is chr(min(32+c, 126)).
+
+        :param c: base count
+        :return: a character
+        """
+        return FastQIntegrator.count2ascii(c)
+
+    @staticmethod
+    def ascii2count(c) -> int:
+        """
+        Convert base count character back to count.
+
+        :param c: the count character
+        :return: the count
+        """
+        return FastQIntegrator.ascii2count(c)
+
+    @staticmethod
+    def integratePair(fastq1: FastQ, fastq2: FastQ, newId: str = "integrated") -> FastQ:
+        """
+        Integrate a pair of FastQs.
+        :param fastq1:
+        :param fastq2:
+        :param newId: the new ID given to the resulting FastQ
+        :return: Integrated FastQ
+        """
+        return FastQIntegrator.integratePair(fastq1, fastq2, newId)
 
 
 class Reader(object):

@@ -7,9 +7,12 @@
 #include<algorithm>
 #include<sstream>
 
-
-void FastQIntegrator::add(FastQ &read) {
-    while (this->length < read.length) {
+/**
+ * Add a FastQ to the calculation. The FastQ object is not stored.
+ * @param fastq
+ */
+void FastQIntegrator::add(FastQ &fastq) {
+    while (this->length < fastq.length) {
         std::array<uint32_t, 4> intArr = {0, 0, 0, 0};
         std::array<double, 4> dArr1 = {1.0, 1.0, 1.0, 1.0};
         std::array<double, 4> dArr2 = {1.0, 1.0, 1.0, 1.0};
@@ -20,10 +23,10 @@ void FastQIntegrator::add(FastQ &read) {
     }
 
 
-    for (uint32_t i = 0; i < read.length; i++) {
-        char bin = this->BASE2BIN[read.seq[i]];
+    for (uint32_t i = 0; i < fastq.length; i++) {
+        char bin = this->BASE2BIN[fastq.seq[i]];
         this->baseCounts[i][bin]++;
-        double p = FastQIntegrator::phred2p(read.qual[i]);
+        double p = FastQIntegrator::phred2p(fastq.qual[i]);
         double p_1 = 1 - p;
         double p_13 = (1 - p) / 3;
         double p_3 = p / 3;
@@ -84,7 +87,7 @@ FastQ FastQIntegrator::integrate(const std::string &newId) {
 }
 
 /**
- * Convert count to ASCII char. Maximum 126 (Counters above 126 will be 126)
+ * Convert count to ASCII char.
  * @param c
  * @return
  */
@@ -96,9 +99,9 @@ uint32_t FastQIntegrator::ascii2count(char c) {
     return c-32;
 }
 
-FastQ FastQIntegrator::integratePair(const std::string &newId, FastQ &record1, FastQ &record2) {
+FastQ FastQIntegrator::integratePair(FastQ &fastq1, FastQ &fastq2, const std::string &newId) {
     FastQIntegrator fi{};
-    fi.add(record1);
-    fi.add(record2);
+    fi.add(fastq1);
+    fi.add(fastq2);
     return fi.integrate(newId);
 }

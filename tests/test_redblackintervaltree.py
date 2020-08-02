@@ -1,5 +1,5 @@
-from xpbt.algorithms.red_black_interval_tree import RedBlackIntervalTree
-from xpbt.algorithms.red_black_interval_tree import RedBlackIntervalTreeNode
+from xpbt.algorithms.trees import RedBlackIntervalTree
+from xpbt.algorithms.trees import RedBlackIntervalTreeNode
 
 from unittest import TestCase
 from random import randint

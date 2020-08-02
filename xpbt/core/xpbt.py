@@ -254,11 +254,11 @@ class DnaKmerBloomFilter(object):
         _xpbt.DnaKmerBloomFilter_swiginit(self, _xpbt.new_DnaKmerBloomFilter(*args))
     __swig_destroy__ = _xpbt.delete_DnaKmerBloomFilter
 
-    def add(self, dna):
-        return _xpbt.DnaKmerBloomFilter_add(self, dna)
+    def add(self, dnaKmer):
+        return _xpbt.DnaKmerBloomFilter_add(self, dnaKmer)
 
-    def contains(self, dna):
-        return _xpbt.DnaKmerBloomFilter_contains(self, dna)
+    def contains(self, dnaKmer):
+        return _xpbt.DnaKmerBloomFilter_contains(self, dnaKmer)
 
     def getKmerK(self):
         return _xpbt.DnaKmerBloomFilter_getKmerK(self)
@@ -348,8 +348,8 @@ class FastQIntegrator(object):
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc="The membership flag")
     __repr__ = _swig_repr
 
-    def add(self, read):
-        return _xpbt.FastQIntegrator_add(self, read)
+    def add(self, fastq):
+        return _xpbt.FastQIntegrator_add(self, fastq)
 
     @staticmethod
     def phred2p(c):
@@ -371,8 +371,8 @@ class FastQIntegrator(object):
         return _xpbt.FastQIntegrator_integrate(self, newId)
 
     @staticmethod
-    def integratePair(newId, record1, record2):
-        return _xpbt.FastQIntegrator_integratePair(newId, record1, record2)
+    def integratePair(fastq1, fastq2, newId):
+        return _xpbt.FastQIntegrator_integratePair(fastq1, fastq2, newId)
 
     def __init__(self):
         _xpbt.FastQIntegrator_swiginit(self, _xpbt.new_FastQIntegrator())
@@ -393,33 +393,22 @@ def FastQIntegrator_count2ascii(c):
 def FastQIntegrator_ascii2count(c):
     return _xpbt.FastQIntegrator_ascii2count(c)
 
-def FastQIntegrator_integratePair(newId, record1, record2):
-    return _xpbt.FastQIntegrator_integratePair(newId, record1, record2)
+def FastQIntegrator_integratePair(fastq1, fastq2, newId):
+    return _xpbt.FastQIntegrator_integratePair(fastq1, fastq2, newId)
 
-class ReadStitcher(object):
+class ReadLazyStitcher(object):
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc="The membership flag")
     __repr__ = _swig_repr
 
-    def __init__(self, *args):
-        _xpbt.ReadStitcher_swiginit(self, _xpbt.new_ReadStitcher(*args))
+    def __init__(self, minNumOfOverlappingBases, maxHammingDistance, allow3PrimeOverhang):
+        _xpbt.ReadLazyStitcher_swiginit(self, _xpbt.new_ReadLazyStitcher(minNumOfOverlappingBases, maxHammingDistance, allow3PrimeOverhang))
 
-    def lazyStitch(self, newId, read1, read2):
-        return _xpbt.ReadStitcher_lazyStitch(self, newId, read1, read2)
-    __swig_destroy__ = _xpbt.delete_ReadStitcher
+    def stitch(self, read1, read2, newId):
+        return _xpbt.ReadLazyStitcher_stitch(self, read1, read2, newId)
+    __swig_destroy__ = _xpbt.delete_ReadLazyStitcher
 
-# Register ReadStitcher in _xpbt:
-_xpbt.ReadStitcher_swigregister(ReadStitcher)
-
-class UnableToStitchException(object):
-    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc="The membership flag")
-    __repr__ = _swig_repr
-
-    def __init__(self):
-        _xpbt.UnableToStitchException_swiginit(self, _xpbt.new_UnableToStitchException())
-    __swig_destroy__ = _xpbt.delete_UnableToStitchException
-
-# Register UnableToStitchException in _xpbt:
-_xpbt.UnableToStitchException_swigregister(UnableToStitchException)
+# Register ReadLazyStitcher in _xpbt:
+_xpbt.ReadLazyStitcher_swigregister(ReadLazyStitcher)
 
 class RedBlackIntervalTree(object):
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc="The membership flag")

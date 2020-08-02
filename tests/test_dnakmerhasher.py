@@ -1,4 +1,4 @@
-from xpbt.algorithms import DnaKmerHasher
+from xpbt.algorithms.hashers import DnaKmerHasher
 from xpbt.genomes import Sequence
 from unittest import TestCase
 from scipy.stats import chisquare

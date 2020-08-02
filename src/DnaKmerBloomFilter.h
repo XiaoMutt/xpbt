@@ -31,9 +31,9 @@ public:
 
     ~DnaKmerBloomFilter();
 
-    bool add(const std::string &dna);
+    bool add(const std::string &dnaKmer);
 
-    bool contains(const std::string &dna);
+    bool contains(const std::string &dnaKmer);
 
     unsigned int getKmerK() const;
 

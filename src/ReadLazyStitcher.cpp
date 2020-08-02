@@ -3,35 +3,24 @@
 //
 
 #include <sstream>
-#include "ReadStitcher.h"
+#include "ReadLazyStitcher.h"
 #include "FastQIntegrator.h"
 #include "ValueError.h"
 #include "Distance.h"
 #include <stdexcept>
 
-ReadStitcher::ReadStitcher(unsigned int minNumOfOverlappingBases, unsigned maxHammingDistance,
-                           bool allow3PrimeOverhang) {
+ReadLazyStitcher::ReadLazyStitcher(unsigned int minNumOfOverlappingBases, unsigned maxHammingDistance,
+                                   bool allow3PrimeOverhang) {
+    if (minNumOfOverlappingBases < 8) {
+        throw std::runtime_error("minNumOfOverlappingBases must be above 8");
+    }
+
+    if (maxHammingDistance > minNumOfOverlappingBases) {
+        throw std::runtime_error("minNumOfOverlappingBases is larger than minNumOfOverlappingBases");
+    }
     this->minNumOfOverlappingBases = minNumOfOverlappingBases;
     this->maxHammingDistance = maxHammingDistance;
     this->allow3PrimeOverhang = allow3PrimeOverhang;
-}
-
-ReadStitcher::ReadStitcher(unsigned int minNumOfOverlappingBases, unsigned int maxHammingDistance) {
-    this->minNumOfOverlappingBases = minNumOfOverlappingBases;
-    this->maxHammingDistance = maxHammingDistance;
-    this->allow3PrimeOverhang = false;
-}
-
-ReadStitcher::ReadStitcher(unsigned int minNumOfOverlappingBases) {
-    this->minNumOfOverlappingBases = minNumOfOverlappingBases;
-    this->maxHammingDistance = 1;
-    this->allow3PrimeOverhang = false;
-}
-
-ReadStitcher::ReadStitcher() {
-    this->minNumOfOverlappingBases = 20;
-    this->maxHammingDistance = 1;
-    this->allow3PrimeOverhang = false;
 }
 
 /**
@@ -41,7 +30,7 @@ ReadStitcher::ReadStitcher() {
     - starts from minNumOfOverlappingBases
     - sliding inwards
     - if the hamming distance of the overlapping part <= maxHammingDistance, the overlapping part is stitched
-    (highest qual base is used when there is a discrepancy; use read1 base if there is a tie)
+    (highest qual base is used when there is a discrepancy)
 
                  read1Begin                          read1End
                      |     minNumOfOverlappingBases     |
@@ -53,7 +42,8 @@ ReadStitcher::ReadStitcher() {
  * @param r2
  * @return the stitched FastQ or an empty FastQ if fail to stitch
  */
-FastQ ReadStitcher::lazyStitch(const std::string &newId, FastQ &read1, FastQ &read2) const {
+
+FastQ ReadLazyStitcher::stitch(FastQ &read1, FastQ &read2, const std::string &newId) const {
     int32_t overlappingRange = (this->allow3PrimeOverhang ?
                                 -(read1.length + read2.length - this->minNumOfOverlappingBases) :
                                 -(read1.length < read2.length ? read1.length : read2.length));
@@ -96,7 +86,7 @@ FastQ ReadStitcher::lazyStitch(const std::string &newId, FastQ &read1, FastQ &re
             // merge read1Overlap and read2Overlap
             FastQ read1Overlap = read1(read1Begin, read1End);
             FastQ read2rcOverlap = read2rc(read2rcBegin, read2rcEnd);
-            FastQ overlap = FastQIntegrator::integratePair("overlap", read1Overlap, read2rcOverlap);
+            FastQ overlap = FastQIntegrator::integratePair(read1Overlap, read2rcOverlap, "overlap");
             seq << overlap.seq;
             qual << overlap.qual;
 

@@ -30,7 +30,7 @@ public:
      * @param read
      * @return
      */
-    void add(FastQ &read);
+    void add(FastQ &fastq);
 
     static double phred2p(const char &c);
 
@@ -42,7 +42,7 @@ public:
 
     FastQ integrate(const std::string &newId);
 
-    static FastQ integratePair(const std::string &newId, FastQ &record1, FastQ &record2);
+    static FastQ integratePair(FastQ &fastq1, FastQ &fastq2, const std::string &newId);
 };
 
 

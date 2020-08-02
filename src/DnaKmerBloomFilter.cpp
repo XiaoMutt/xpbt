@@ -99,13 +99,13 @@ bool DnaKmerBloomFilter::peek(uint64_t bitPosition) {
 
 /**
  * Add DNA to the bloom filter
- * @param dna the DNA sequence
- * @return false if this DNA sequence already exists, i.e. not need to add, else false i.e. added
+ * @param dnaKmer the DNA sequence
+ * @return false if this DNA sequence already exists, i.e. not need to add, else true i.e. added
  */
-bool DnaKmerBloomFilter::add(const std::string &dna) {
+bool DnaKmerBloomFilter::add(const std::string &dnaKmer) {
     bool exist = true;
     for (unsigned int i = 0; i < this->k; i++) {
-        uint64_t bitPosition = this->dnaKmerHashers[i]->hash(dna);
+        uint64_t bitPosition = this->dnaKmerHashers[i]->hash(dnaKmer);
         exist &= this->strike(bitPosition);
     }
     return !exist;
@@ -113,12 +113,12 @@ bool DnaKmerBloomFilter::add(const std::string &dna) {
 
 /**
  * Check if the Bloom Filter contains the DNA array
- * @param dna the DNA sequence
+ * @param dnaKmer the DNA sequence
  * @return true if the Bloom Filter contains the DNA sequence, else false
  */
-bool DnaKmerBloomFilter::contains(const std::string &dna) {
+bool DnaKmerBloomFilter::contains(const std::string &dnaKmer) {
     for (unsigned int i = 0; i < this->k; i++) {
-        uint64_t bitPosition = this->dnaKmerHashers[i]->hash(dna);
+        uint64_t bitPosition = this->dnaKmerHashers[i]->hash(dnaKmer);
         if (!this->peek(bitPosition)) {
             return false;
         };

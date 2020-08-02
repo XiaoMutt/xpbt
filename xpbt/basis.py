@@ -14,3 +14,4 @@ class Immutable(object):
             raise Exception(f'Cannot set the attribute {key} of an immutable {self.__class__} object to {value}.')
         else:
             super(Immutable, self).__setattr__(key, value)
+
