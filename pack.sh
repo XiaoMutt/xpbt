@@ -22,6 +22,11 @@ echo "###Compile xpbt cxx file..."
 g++ -fPIC -c -O2 -std=c++11 ./src/xpbt_wrap.cxx -I/usr/include/python3.8 -lstdc++ -o ./tmp/xpbt_wrap.o
 ofiles+=("./tmp/xpbt_wrap.o")
 
+echo "### Make xbpt.core/..."
+mkdir ./xbpt/core
+
+cat ""> ./xpbt/core/__init__.py
+
 echo "###Pack " "${ofiles[@]}" "into xpbt/core/_xpbt.so..."
 g++ -shared "${ofiles[@]}" -o ./xpbt/core/_xpbt.so
 

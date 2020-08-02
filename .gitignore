@@ -5,7 +5,9 @@ main.cpp
 src/xpbt_wrap.cxx
 venv/
 tmp/
+__pycache__/
 .idea
+xpbt/core/
 .DS_Store
 # User-specific stuff
 .idea/**/workspace.xml
