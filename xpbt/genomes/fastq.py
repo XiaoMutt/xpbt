@@ -1,21 +1,10 @@
 import gzip
-from xpbt.core.xpbt import FastQ
+from xpbt.core import FastQ
+import xpbt.core
 
 
-class Record(FastQ):
-    def __getitem__(self, item):
-        if isinstance(item, tuple):
-            # slice with new name
-            if isinstance(item[0], slice) and isinstance(item[1], str):
-                return Record(item[1], self.seq[item[0]], self.desc, self.qual[item[0]])
-        elif isinstance(item, slice):
-            # slice only
-            return Record(self.id, self.seq[item], self.desc, self.qual[item])
-        else:
-            raise Exception(f"Cannot interpret {item}")
-
-    def __str__(self):
-        return f"@{self.id}\n{self.seq}\n+{self.desc}\n{self.qual}"
+class FastQIntegrator(xpbt.core.FastQIntegrator):
+    pass
 
 
 class Reader(object):

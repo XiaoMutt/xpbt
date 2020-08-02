@@ -6,22 +6,24 @@
 #define XPBT_REDBLACKINTERVALTREE_H
 
 
+#include <vector>
 #include "RedBlackIntervalTreeNode.h"
 
 class RedBlackIntervalTree {
 
 public:
 
+    bool check();
+
     void insert(RedBlackIntervalTreeNode *z);
 
-    void check();
+    void search(int32_t value, std::vector<RedBlackIntervalTreeNode *> &result);
 
     RedBlackIntervalTree();
 
 //    ~RedBlackIntervalTree();
 
 protected:
-
 
     void insertFixUp(RedBlackIntervalTreeNode *z);
 
@@ -30,10 +32,15 @@ protected:
     void rightRotate(RedBlackIntervalTreeNode *x);
 
 //    void destructorHelper(RedBlackIntervalTreeNode *z);
+    void search(RedBlackIntervalTreeNode *node, int32_t value, std::vector<RedBlackIntervalTreeNode *> &result);
 
-    void checkHelper(RedBlackIntervalTreeNode *z, int counter, int &numBlackNode, bool parentIsRed);
+    void check(RedBlackIntervalTreeNode *z,
+               uint32_t counter, uint32_t &numBlackNode,
+               int32_t parentMax,
+               bool parentIsRed);
 
     RedBlackIntervalTreeNode *root;
+
 };
 
 

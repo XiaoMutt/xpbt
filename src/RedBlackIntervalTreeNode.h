@@ -22,6 +22,10 @@ public:
     explicit RedBlackIntervalTreeNode(int32_t low, int32_t high);
 
     void updateMax();
+
+    void updateMax(RedBlackIntervalTreeNode *x);
+
+    uint64_t getAddress();
 };
 
 

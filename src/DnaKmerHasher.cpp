@@ -144,15 +144,13 @@ uint64_t DnaKmerHasher::getB() const {
     return this->b;
 }
 
-std::vector<unsigned int> DnaKmerHasher::getIndexPermutations() {
-    std::vector<unsigned int> res;
+void DnaKmerHasher::getIndexPermutations(std::vector<int> &result) {
     for (unsigned int i = 0; i < this->k; i++) {
-        res.push_back(this->indexPermutations[i]);
+        result.push_back(this->indexPermutations[i]);
     }
-    return res;
 }
 
-std::string DnaKmerHasher::toString() {
+std::string DnaKmerHasher::str() {
     std::ostringstream res;
     char sep = ',';
     res << this->K << sep << (this->w - this->w_M) << sep
@@ -161,5 +159,6 @@ std::string DnaKmerHasher::toString() {
         res << sep;
         res << this->indexPermutations[i];
     }
+    // return value optimization should occur;
     return res.str();
 }

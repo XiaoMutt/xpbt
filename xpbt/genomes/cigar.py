@@ -1,6 +1,6 @@
 from xpbt.frames import *
-from xpbt.core import RedBlackIntervalTreeNode
-from xpbt.genome.coordinates import Zeronate
+from xpbt.algorithms.red_black_interval_tree import RedBlackIntervalTreeNode
+from xpbt.genomes.coordinates import Zeronate
 from enum import IntEnum
 import re
 
@@ -31,6 +31,14 @@ class CIGAR(metaclass=Frozen):
 
 class Cigarette(RedBlackIntervalTreeNode, Immutable):
     def __init__(self, start: int, stop: int, zeronate: Zeronate, cigarCode: CIGAR.CODE):
+        """
+        A single unit of a CIGAR string.
+        This class objects are immutable at the python level.
+        :param start:
+        :param stop:
+        :param zeronate:
+        :param cigarCode:
+        """
         super(Cigarette, self).__init__(start, stop)
         self.zeronate = zeronate
         self.cigarCode = cigarCode

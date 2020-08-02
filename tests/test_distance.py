@@ -1,5 +1,5 @@
-from xpbt import Distance
-from xpbt import Sequence
+from xpbt.genomes import Distance
+from xpbt.genomes import Sequence
 from unittest import TestCase
 
 

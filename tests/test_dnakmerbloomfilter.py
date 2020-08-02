@@ -1,7 +1,8 @@
-from xpbt import DnaKmerBloomFilter
-from xpbt import Sequence
+from xpbt.algorithms.dna_kmer_bloom_filter import DnaKmerBloomFilter
+from xpbt.genomes import Sequence
 from unittest import TestCase
-import math, os
+import math
+import os
 
 
 class TestDnaKmerBloomFilter(TestCase):
@@ -103,7 +104,7 @@ class TestDnaKmerBloomFilter(TestCase):
                         self.assertEqual(dkbf1.contains(dna), dkbf2.contains(dna))
 
                     for _ in range(1000):
-                        dna=Sequence.randomDnaKmer(kmerk)
+                        dna = Sequence.randomDnaKmer(kmerk)
                         self.assertEqual(dkbf1.contains(dna), dkbf2.contains(dna))
                         self.assertEqual(dkbf1.add(dna), dkbf2.add(dna))
 
@@ -134,9 +135,8 @@ class TestDnaKmerBloomFilter(TestCase):
                         self.assertEqual(dkbf1.contains(dna), dkbf2.contains(dna))
 
                     for _ in range(1000):
-                        dna=Sequence.randomDnaKmer(kmerk)
+                        dna = Sequence.randomDnaKmer(kmerk)
                         self.assertEqual(dkbf1.contains(dna), dkbf2.contains(dna))
                         self.assertEqual(dkbf1.add(dna), dkbf2.add(dna))
 
                     os.remove(file)
-

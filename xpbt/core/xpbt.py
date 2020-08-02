@@ -297,8 +297,8 @@ class DnaKmerHasher(object):
     def getB(self):
         return _xpbt.DnaKmerHasher_getB(self)
 
-    def getIndexPermutations(self):
-        return _xpbt.DnaKmerHasher_getIndexPermutations(self)
+    def getIndexPermutations(self, result):
+        return _xpbt.DnaKmerHasher_getIndexPermutations(self, result)
 
     def __init__(self, *args):
         _xpbt.DnaKmerHasher_swiginit(self, _xpbt.new_DnaKmerHasher(*args))
@@ -307,8 +307,8 @@ class DnaKmerHasher(object):
     def hash(self, kmer):
         return _xpbt.DnaKmerHasher_hash(self, kmer)
 
-    def toString(self):
-        return _xpbt.DnaKmerHasher_toString(self)
+    def str(self):
+        return _xpbt.DnaKmerHasher_str(self)
 
 # Register DnaKmerHasher in _xpbt:
 _xpbt.DnaKmerHasher_swigregister(DnaKmerHasher)
@@ -336,6 +336,9 @@ class FastQ(object):
 
     def hammingDistance(self, compareTo):
         return _xpbt.FastQ_hammingDistance(self, compareTo)
+
+    def str(self):
+        return _xpbt.FastQ_str(self)
     __swig_destroy__ = _xpbt.delete_FastQ
 
 # Register FastQ in _xpbt:
@@ -422,11 +425,14 @@ class RedBlackIntervalTree(object):
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc="The membership flag")
     __repr__ = _swig_repr
 
+    def check(self):
+        return _xpbt.RedBlackIntervalTree_check(self)
+
     def insert(self, z):
         return _xpbt.RedBlackIntervalTree_insert(self, z)
 
-    def check(self):
-        return _xpbt.RedBlackIntervalTree_check(self)
+    def search(self, value, result):
+        return _xpbt.RedBlackIntervalTree_search(self, value, result)
 
     def __init__(self):
         _xpbt.RedBlackIntervalTree_swiginit(self, _xpbt.new_RedBlackIntervalTree())
@@ -449,8 +455,11 @@ class RedBlackIntervalTreeNode(object):
     def __init__(self, low, high):
         _xpbt.RedBlackIntervalTreeNode_swiginit(self, _xpbt.new_RedBlackIntervalTreeNode(low, high))
 
-    def updateMax(self):
-        return _xpbt.RedBlackIntervalTreeNode_updateMax(self)
+    def updateMax(self, *args):
+        return _xpbt.RedBlackIntervalTreeNode_updateMax(self, *args)
+
+    def getAddress(self):
+        return _xpbt.RedBlackIntervalTreeNode_getAddress(self)
     __swig_destroy__ = _xpbt.delete_RedBlackIntervalTreeNode
 
 # Register RedBlackIntervalTreeNode in _xpbt:
@@ -551,6 +560,112 @@ _xpbt.Zeronate_swigregister(Zeronate)
 
 def Zeronate_parse(coordinate):
     return _xpbt.Zeronate_parse(coordinate)
+
+class RedBlackIntervalTreeNodeVector(object):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc="The membership flag")
+    __repr__ = _swig_repr
+
+    def iterator(self):
+        return _xpbt.RedBlackIntervalTreeNodeVector_iterator(self)
+    def __iter__(self):
+        return self.iterator()
+
+    def __nonzero__(self):
+        return _xpbt.RedBlackIntervalTreeNodeVector___nonzero__(self)
+
+    def __bool__(self):
+        return _xpbt.RedBlackIntervalTreeNodeVector___bool__(self)
+
+    def __len__(self):
+        return _xpbt.RedBlackIntervalTreeNodeVector___len__(self)
+
+    def __getslice__(self, i, j):
+        return _xpbt.RedBlackIntervalTreeNodeVector___getslice__(self, i, j)
+
+    def __setslice__(self, *args):
+        return _xpbt.RedBlackIntervalTreeNodeVector___setslice__(self, *args)
+
+    def __delslice__(self, i, j):
+        return _xpbt.RedBlackIntervalTreeNodeVector___delslice__(self, i, j)
+
+    def __delitem__(self, *args):
+        return _xpbt.RedBlackIntervalTreeNodeVector___delitem__(self, *args)
+
+    def __getitem__(self, *args):
+        return _xpbt.RedBlackIntervalTreeNodeVector___getitem__(self, *args)
+
+    def __setitem__(self, *args):
+        return _xpbt.RedBlackIntervalTreeNodeVector___setitem__(self, *args)
+
+    def pop(self):
+        return _xpbt.RedBlackIntervalTreeNodeVector_pop(self)
+
+    def append(self, x):
+        return _xpbt.RedBlackIntervalTreeNodeVector_append(self, x)
+
+    def empty(self):
+        return _xpbt.RedBlackIntervalTreeNodeVector_empty(self)
+
+    def size(self):
+        return _xpbt.RedBlackIntervalTreeNodeVector_size(self)
+
+    def swap(self, v):
+        return _xpbt.RedBlackIntervalTreeNodeVector_swap(self, v)
+
+    def begin(self):
+        return _xpbt.RedBlackIntervalTreeNodeVector_begin(self)
+
+    def end(self):
+        return _xpbt.RedBlackIntervalTreeNodeVector_end(self)
+
+    def rbegin(self):
+        return _xpbt.RedBlackIntervalTreeNodeVector_rbegin(self)
+
+    def rend(self):
+        return _xpbt.RedBlackIntervalTreeNodeVector_rend(self)
+
+    def clear(self):
+        return _xpbt.RedBlackIntervalTreeNodeVector_clear(self)
+
+    def get_allocator(self):
+        return _xpbt.RedBlackIntervalTreeNodeVector_get_allocator(self)
+
+    def pop_back(self):
+        return _xpbt.RedBlackIntervalTreeNodeVector_pop_back(self)
+
+    def erase(self, *args):
+        return _xpbt.RedBlackIntervalTreeNodeVector_erase(self, *args)
+
+    def __init__(self, *args):
+        _xpbt.RedBlackIntervalTreeNodeVector_swiginit(self, _xpbt.new_RedBlackIntervalTreeNodeVector(*args))
+
+    def push_back(self, x):
+        return _xpbt.RedBlackIntervalTreeNodeVector_push_back(self, x)
+
+    def front(self):
+        return _xpbt.RedBlackIntervalTreeNodeVector_front(self)
+
+    def back(self):
+        return _xpbt.RedBlackIntervalTreeNodeVector_back(self)
+
+    def assign(self, n, x):
+        return _xpbt.RedBlackIntervalTreeNodeVector_assign(self, n, x)
+
+    def resize(self, *args):
+        return _xpbt.RedBlackIntervalTreeNodeVector_resize(self, *args)
+
+    def insert(self, *args):
+        return _xpbt.RedBlackIntervalTreeNodeVector_insert(self, *args)
+
+    def reserve(self, n):
+        return _xpbt.RedBlackIntervalTreeNodeVector_reserve(self, n)
+
+    def capacity(self):
+        return _xpbt.RedBlackIntervalTreeNodeVector_capacity(self)
+    __swig_destroy__ = _xpbt.delete_RedBlackIntervalTreeNodeVector
+
+# Register RedBlackIntervalTreeNodeVector in _xpbt:
+_xpbt.RedBlackIntervalTreeNodeVector_swigregister(RedBlackIntervalTreeNodeVector)
 
 
 

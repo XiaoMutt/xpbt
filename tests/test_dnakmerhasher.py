@@ -1,9 +1,8 @@
-from xpbt import DnaKmerHasher
-from xpbt import Sequence
+from xpbt.algorithms import DnaKmerHasher
+from xpbt.genomes import Sequence
 from unittest import TestCase
 from scipy.stats import chisquare
 import numpy as np
-import matplotlib.pyplot as plt
 
 
 class TestDnaKmerHasher(TestCase):
@@ -102,5 +101,5 @@ class TestDnaKmerHasher(TestCase):
                     dna = Sequence.randomDnaKmer(K)
                     hash = dkh.hash(dna)
 
-                    dkh = DnaKmerHasher(dkh.toString())
+                    dkh = DnaKmerHasher(dkh.str())
                     self.assertEqual(hash, dkh.hash(dna))

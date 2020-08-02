@@ -1,9 +1,8 @@
-from xpbt import Sequence
+from xpbt.genomes import Sequence
 
 from unittest import TestCase
 from collections import Counter
 from scipy.stats import chisquare
-import matplotlib.pyplot as plt
 
 
 class TestSequence(TestCase):

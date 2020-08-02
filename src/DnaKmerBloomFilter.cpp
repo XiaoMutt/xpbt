@@ -140,7 +140,7 @@ void DnaKmerBloomFilter::saveToFile(const std::string &fileName) {
     }
     ofs << this->kmerK << sep << this->m << sep << this->n << sep << this->k << div;
     for (unsigned int i = 0; i < this->k; i++) {
-        ofs << this->dnaKmerHashers[i]->toString() << div;
+        ofs << this->dnaKmerHashers[i]->str() << div;
     }
     uint64_t bytesNum = this->m >> 3u;
     for (uint64_t i = 0; i < bytesNum; i++) {

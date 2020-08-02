@@ -8,7 +8,8 @@
 #include<string>
 
 class FastQ {
-
+protected:
+    static const char VALID_BASES[128];
 public:
     const std::string id;
     const std::string seq;
@@ -32,6 +33,8 @@ public:
     FastQ operator()(uint32_t a, uint32_t b);
 
     uint32_t hammingDistance(const FastQ &compareTo);
+
+    std::string str();
 
 };
 

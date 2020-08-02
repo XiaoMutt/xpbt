@@ -39,7 +39,7 @@ public:
 
     uint64_t getB() const;
 
-    std::vector<unsigned int> getIndexPermutations();
+    void getIndexPermutations(std::vector<int> &result);
 
     DnaKmerHasher(unsigned int K, unsigned int M);
 
@@ -49,7 +49,7 @@ public:
 
     uint64_t hash(const std::string &kmer);
 
-    std::string toString();
+    std::string str();
 
 };
 

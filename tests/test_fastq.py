@@ -1,21 +1,11 @@
-from xpbt import FastQ
-from xpbt import FastQIntegrator
-from xpbt import ReadStitcher
-from xpbt.ngs import fastq
+from xpbt.genomes.fastq import FastQ
+from xpbt.genomes.fastq import FastQIntegrator
+from xpbt.genomes.read import ReadStitcher
+from xpbt.genomes import fastq
 from unittest import TestCase
 
 
 class TestFastQ(TestCase):
-    def test_fastq(self):
-        fi = FastQIntegrator()
-        with fastq.Reader("../samples/SRR390728.fastq") as reader:
-            for r in reader:
-                fi.add(r)
-
-        r = fi.integrate("new")
-
-        print(r.seq)
-
     def test_fastq_integrator(self):
         fi = FastQIntegrator()
         record1 = FastQ("record1",

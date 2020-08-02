@@ -60,10 +60,10 @@ class DnaKmerHasher(object):
         pass
 
     def __init2__(self, string:str):
-        # string is a string created by DnaKmerHasher.toString()
+        # string is a string created by DnaKmerHasher.str()
         pass
 
-    def toString(self)->str:
+    def str(self)->str:
         # save the DnaKmerHasher to a string,
         pass
 

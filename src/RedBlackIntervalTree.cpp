@@ -6,25 +6,25 @@
 #include "RedBlackIntervalTree.h"
 
 
-
 void RedBlackIntervalTree::insert(RedBlackIntervalTreeNode *z) {
     RedBlackIntervalTreeNode *y = nullptr; // track the parent node;
-    RedBlackIntervalTreeNode *x = this->root; // transverse to find the insertion spot;
+    RedBlackIntervalTreeNode *x = this->root; // transverse to find the leaf insertion spot;
     while (x != nullptr) {
         y = x;
-        x = (z->low > x->low ? x->right : x->left);
+        y->updateMax(z);
+        x = (z->low < x->low ? x->left : x->right);
     }
 
     z->parent = y;
     if (y == nullptr) {
         this->root = z;
     } else {
-        if (z->low > y->low) {
-            y->right = z;
-        } else {
+        // < put on left; >= put on right; this way it matchs the [low, high) interval search
+        if (z->low < y->low) {
             y->left = z;
+        } else {
+            y->right = z;
         }
-        y->updateMax();
     }
 
     this->insertFixUp(z);
@@ -99,7 +99,7 @@ void RedBlackIntervalTree::leftRotate(RedBlackIntervalTreeNode *x) {
     y->left = x;
     x->parent = y;
 
-    x->updateMax();
+    x->updateMax(); //must update x's first because x is the child
     y->updateMax();
 }
 
@@ -127,27 +127,26 @@ void RedBlackIntervalTree::rightRotate(RedBlackIntervalTreeNode *x) {
     y->updateMax();
 }
 
-//RedBlackIntervalTree::~RedBlackIntervalTree() {
-//    this->destructorHelper(this->root);
-//}
-
-//void RedBlackIntervalTree::destructorHelper(RedBlackIntervalTreeNode *z) {
-//    if (z != nullptr) {
-//        this->destructorHelper(z->left);
-//        this->destructorHelper(z->right);
-//    }
-//}
-
-void RedBlackIntervalTree::check() {
-    int numBlackNode = -1;
-    this->checkHelper(this->root, 0, numBlackNode, false);
+/**
+ * For debugging and testing purpose. Check whether the tree violates the RedBlackTree properties
+ * @return true if all good; throw runtime errors if errors found.
+ */
+bool RedBlackIntervalTree::check() {
+    uint32_t numBlackNode = 0;
+    if (this->root != nullptr && this->root->red) {
+        throw std::runtime_error("root node is red");
+    }
+    this->check(this->root, 0, numBlackNode, this->root->max, false);
+    return true;
 }
 
-void RedBlackIntervalTree::checkHelper(RedBlackIntervalTreeNode *z,
-                                       int counter, int &numBlackNode, bool parentIsRed) {
+void RedBlackIntervalTree::check(RedBlackIntervalTreeNode *z,
+                                 uint32_t counter, uint32_t &numBlackNode,
+                                 int32_t parentMax,
+                                 bool parentIsRed) {
     if (z == nullptr) {
         // at leaf
-        if (numBlackNode < 0) {
+        if (numBlackNode == 0) {
             numBlackNode = counter;
         } else if (numBlackNode != counter) {
             throw std::runtime_error("unequal black nodes count");
@@ -156,8 +155,45 @@ void RedBlackIntervalTree::checkHelper(RedBlackIntervalTreeNode *z,
         if (parentIsRed && z->red) {
             throw std::runtime_error("double red nodes");
         }
-        this->checkHelper(z->left, counter + (z->red ? 0 : 1), numBlackNode, z->red);
-        this->checkHelper(z->right, counter + (z->red ? 0 : 1), numBlackNode, z->red);
+        if (parentMax < z->max) {
+            throw std::runtime_error("parent max < currentmax");
+        }
+        this->check(z->left, counter + (z->red ? 0 : 1), numBlackNode, z->max, z->red);
+        this->check(z->right, counter + (z->red ? 0 : 1), numBlackNode, z->max, z->red);
     }
 }
 
+void RedBlackIntervalTree::search(RedBlackIntervalTreeNode *node, int32_t value,
+                                  std::vector<RedBlackIntervalTreeNode *> &result) {
+    if (node != nullptr) {
+        if (value < node->low) {
+            // value < node->max; no need to check
+            this->search(node->left, value, result);
+        } else {
+            if (value < node->max) {
+                if (value < node->high) {
+                    result.push_back(node);
+                }
+                this->search(node->left, value, result);
+                this->search(node->right, value, result);
+            }
+
+        }
+    }
+}
+
+void RedBlackIntervalTree::search(int32_t value, std::vector<RedBlackIntervalTreeNode *> &result) {
+    this->search(this->root, value, result);
+}
+
+//RedBlackIntervalTree::~RedBlackIntervalTree() {
+//    this->destructorHelper(this->root);
+//}
+//
+//void RedBlackIntervalTree::destructorHelper(RedBlackIntervalTreeNode *z) {
+//    if (z != nullptr) {
+//        this->destructorHelper(z->left);
+//        this->destructorHelper(z->right);
+//        delete z;
+//    }
+//}
