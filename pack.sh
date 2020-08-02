@@ -23,9 +23,9 @@ g++ -fPIC -c -O2 -std=c++11 ./src/xpbt_wrap.cxx -I/usr/include/python3.8 -lstdc+
 ofiles+=("./tmp/xpbt_wrap.o")
 
 echo "### Make xbpt.core/..."
-mkdir ./xbpt/core
+mkdir xbpt/core
 
-cat ""> ./xpbt/core/__init__.py
+echo "# This module contains the SWIG ported C++ classes" > ./xpbt/core/__init__.py
 
 echo "###Pack " "${ofiles[@]}" "into xpbt/core/_xpbt.so..."
 g++ -shared "${ofiles[@]}" -o ./xpbt/core/_xpbt.so
