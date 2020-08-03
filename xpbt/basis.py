@@ -1,6 +1,8 @@
 class Frozen(type):
     """
-    Meta class used to construct immu
+    Meta class used to construct immutable class:
+    * class variable are not allowed to change values.
+    * cannot add attributes.
     """
 
     def __setattr__(self, key, value):
@@ -8,6 +10,10 @@ class Frozen(type):
 
 
 class Immutable(object):
+    """
+    Parent class to construct ann Immutable object.
+    After initialization the initial values are not allowed to change.
+    """
     def __setattr__(self, key, value):
         # block changing of the attributes
         if key in self.__dict__:

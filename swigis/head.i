@@ -8,7 +8,7 @@ namespace std{
         %template(IntVector) vector<int>;
 }
 
-/* Exception wrappers must be defined in before the class::function */
+/* Exception wrappers must be defined before the class::function */
 %exception{
 try {
     $action

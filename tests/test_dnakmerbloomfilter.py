@@ -43,7 +43,7 @@ class TestDnaKmerBloomFilter(TestCase):
                     false_positive = 0
                     count = 0
                     # ATTENTION: need to have >10^(n+1) rounds to have an accurate estimate
-                    while count < 10 ** (n + 2):
+                    while count < 10 ** (n + 2)*2:
                         dna = Sequence.randomDnaKmer(kmerk)
                         if dna not in tracking:
                             false_positive += (dkbf.contains(dna))

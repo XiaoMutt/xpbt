@@ -15,10 +15,11 @@ public:
     const std::string chr;
     const uint32_t start;
     const uint32_t stop;
-    const bool strand;
+    const bool reverseStrand;
 
     Zeronate(std::string chr, uint32_t start, uint32_t stop, bool strand);
-    static Zeronate parse(std::string coordinate);
+    std::string str();
+    static Zeronate parse(const std::string& coordinate);
 
 
 };

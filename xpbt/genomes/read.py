@@ -1,5 +1,8 @@
 import xpbt.core
 from xpbt.genomes.fastq import FastQ
+from xpbt.algorithms.trees import RedBlackIntervalTree
+from xpbt.genomes.cigar import Cigarette, CIGAR
+from xpbt.genomes.coordinates import Zeronate
 
 
 class ReadLazyStitcher(xpbt.core.ReadLazyStitcher):
@@ -41,3 +44,44 @@ class ReadLazyStitcher(xpbt.core.ReadLazyStitcher):
         :raise: ValueError if not able to stitch
         """
         return super(ReadLazyStitcher, self).stitch(read1, read2, newId)
+
+
+class AlignedRead(RedBlackIntervalTree):
+    """
+    Storing all the aligned segments (down to the single CIGAR unit).
+    This is backed up by a RedBlackIntervalTree for fast interval search.
+    """
+
+    def __init__(self, readId: str):
+        super(AlignedRead, self).__init__()
+        self.readId = readId
+
+    def insertCigarette(self, cigarette: Cigarette) -> None:
+        """
+        Insert a cigarette into the AlignedRead.
+        :param cigarette:
+        :return: None
+        """
+        super(AlignedRead, self).insert(cigarette)
+
+    def insertAlignedSegment(self, alignedZeronate: Zeronate,
+                             cigarTuplePairs: tuple) -> None:
+        """
+        Insert an aligned segment into the AlignedRead.
+        :param alignedZeronate: the aligned Zeronate on the genome
+        :param cigarTuplePairs: the cigar tuple pairs (cigarCode, length)
+        :return: None
+        """
+        current_query_pos = 0
+        current_refer_pos = alignedZeronate.stop if alignedZeronate.reverseStrand else alignedZeronate.start
+        flag = -1 if alignedZeronate.reverseStrand else 1
+
+        for code, length in cigarTuplePairs[::flag]:
+            next_query_pos = current_query_pos + length * CIGAR.CONSUMES_QUERY[code]
+            next_refer_pos = current_refer_pos + length * CIGAR.CONSUMES_REFER[code] * flag
+            if CIGAR.ALIGN_RELEVANT[code]:
+                self.insertCigarette(Cigarette(current_query_pos, next_query_pos,
+                                               Zeronate(alignedZeronate.chr,
+                                                        current_refer_pos, next_refer_pos,
+                                                        alignedZeronate.reverseStrand),
+                                               code))

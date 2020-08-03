@@ -38,6 +38,7 @@ class TestRead(TestCase):
                       "TGAAACCCCATCTCTACTAAAAATACAAAATTTAGCCACGCATGGT",
                       "",
                       "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB")
+
         with self.assertRaises(ValueError):
             rs.stitch(read1, read2, "unableToStitch")
 

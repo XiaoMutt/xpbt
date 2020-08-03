@@ -25,7 +25,8 @@ ofiles+=("./tmp/xpbt_wrap.o")
 echo "### Make xbpt.core/..."
 mkdir xbpt/core
 
-echo "# This module contains the SWIG ported C++ classes" > ./xpbt/core/__init__.py
+echo "# This module contains the SWIG-ported C++ classes" > ./xpbt/core/__init__.py
+echo "from .xpbt import *" >> ./xpbt/core/__init__.py
 
 echo "###Pack " "${ofiles[@]}" "into xpbt/core/_xpbt.so..."
 g++ -shared "${ofiles[@]}" -o ./xpbt/core/_xpbt.so

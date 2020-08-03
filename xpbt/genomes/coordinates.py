@@ -1,5 +1,1 @@
-import xpbt.core
-
-
-class Zeronate(xpbt.core.Zeronate):
-    pass
+from xpbt.core import Zeronate
