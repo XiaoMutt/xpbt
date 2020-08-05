@@ -79,14 +79,8 @@ A Bloom filter for DNA Kmers.
 ### Sequence
 A class holds methods for DNA and RNA sequences.
 
-### Zeronate
-A 0-based genome coordinate.
-
 ### Distance
 A class holds method for calculating distances between strings
-
-### FastQ
-An immutable FASTQ record class. The fastq module also provide a FASTQ File Reader.
 
 ### FastQIntegrator
 An Integrator to combine FastQ's belongs to the same initial DNA molecule.
@@ -97,8 +91,18 @@ A RedBlackIntervalTree for fast interval search.
 ### ReadLazyStitcher
 A read1 read2 stitcher using a lazy-overlapping method.
 
-### In Progress
-- CIGAR and AlignedRead
+### Zeronate
+A 0-based genome coordinate.
+
+### FastQ
+An immutable FASTQ record class. The fastq module also provide a FASTQ File Reader.
+
+### CIGAR
+A class holding critical information about CIGAR
+
+### AlignedRead
+Backed up by a RedBlackIntervalTree, it holds aligned segments of a read (query), and allows fast mapping of the base 
+on the read (query) to the reference (the genome that the read aligned to).
 
 ### Proposed
 - Distance::levenshtein

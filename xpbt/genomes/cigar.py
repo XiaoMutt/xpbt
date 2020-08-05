@@ -11,7 +11,7 @@ class CIGAR(metaclass=Frozen):
     Contains CIGAR CODE and the properties of CIGAR CODE. Contains methods related to CIGAR CODE.
     """
 
-    class CODE(IntEnum):
+    class OPERATION(IntEnum):
         # Do not change the numbers: defined in samtools manual: https://samtools.github.io/hts-specs/SAMv1.pdf:
         # * “Consumes query” and “consumes reference” indicate whether the CIGAR operation causes the alignment to step
         # along the query sequence and the reference sequence respectively.
@@ -34,6 +34,17 @@ class CIGAR(metaclass=Frozen):
         U = 9  # not a CIGAR code; reserved; not used
         _ = -1  # not a CIGAR code; reserved; not used
 
+        # CIGAR string is aligner dependent. For H and S, aligner may do additional things to choose H or S
+        # If you use bwa-mem, here is from BWA's github (https://github.com/lh3/bwa):
+        # * 2. Why does a read appear multiple times in the output SAM?
+        # * BWA-SW and BWA-MEM perform local alignments. If there is a translocation, a gene fusion or a long deletion,
+        # a read bridging the break point may have two hits, occupying two lines in the SAM output.
+        # With the default setting of BWA-MEM, one and only one line is primary and is soft clipped;
+        # other lines are tagged with 0x800 SAM flag (supplementary alignment) and are hard clipped.
+
+        # With these being said, a primary and a supplementary alignment can share overlapping regions on the query.
+        # If there are enough overlapping bases, the additional alignment might be labeled as a secondary alignment.
+
     CONSUMES_QUERY = (True, True, False, False, True, False, False, True, True, False, False)
     CONSUMES_REFER = (True, False, True, True, False, False, False, True, True, False, False)
     CONSUMES_BOTH2 = (True, False, False, False, False, False, False, True, True, False, False)
@@ -42,18 +53,20 @@ class CIGAR(metaclass=Frozen):
     PATTERN = re.compile(r'(\d+)([MIDNSHPEX])')
 
     @classmethod
-    def cigarString2Tuple(cls, cigarString: str):
+    def cigarString2TuplePairs(cls, cigarString: str):
         """
-        Convert cigarString to cigar tuple pairs (CIGAR.CODE:int, length:int)
+        Convert cigarString to cigar tuple pairs (CIGAR.OPERATION, length).
+        ATTENTION: this function does not check whether the cigar string is valid or not. For example, it does not
+        raise exceptions when an H is between two M.
         :param cigarString: the cigarString to be converted
         :return: a tuple of cigar tuple pairs
         """
-        return tuple((getattr(cls, code_char), int(length))
+        return tuple((cls.OPERATION[code_char], int(length))
                      for length, code_char in cls.PATTERN.findall(cigarString))
 
 
 class Cigarette(RedBlackIntervalTreeNode, Immutable):
-    def __init__(self, start: int, stop: int, zeronate: Zeronate, cigarCode: CIGAR.CODE):
+    def __init__(self, start: int, stop: int, zeronate: Zeronate, cigarOperation: CIGAR.OPERATION):
         """
         A RedBlackIntervalTreeNode representing a single alignment-relevant CIGAR CODE unit
         . It holds the start, stop on the read and
@@ -65,12 +78,12 @@ class Cigarette(RedBlackIntervalTreeNode, Immutable):
         :param start: the start position of the alignment on the query sequence (0-based)
         :param stop: the stop position of the alignment on the query sequence (0-based)
         :param zeronate: the aligned Zeronate on the reference genome.
-        :param cigarCode: the cigarCode
+        :param cigarOperation: the cigar operation code
         """
 
         super(Cigarette, self).__init__(start, stop)
         self.zeronate = zeronate
-        self.cigarCode = cigarCode
+        self.cigarOperation = cigarOperation
 
     def map(self, zeroBasedPositionOnQuery: int) -> tp.Optional[Zeronate]:
         """
@@ -91,7 +104,7 @@ class Cigarette(RedBlackIntervalTreeNode, Immutable):
         :param zeroBasedPositionOnQuery: 0-based query position
         :return: Zeronate of the the aligned reference position or None if not aligned on reference
         """
-        if CIGAR.CONSUMES_BOTH2[self.cigarCode]:
+        if CIGAR.CONSUMES_BOTH2[self.cigarOperation]:
             if self.zeronate.reverseStrand:
                 mapped = self.zeronate.stop - (zeroBasedPositionOnQuery - self.start)
                 return Zeronate(self.zeronate.chr, mapped - 1, mapped, self.zeronate.reverseStrand)
