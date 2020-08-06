@@ -25,8 +25,8 @@ class CIGAR(metaclass=Frozen):
         I = 1  # insertion to the reference
         D = 2  # deletion from the reference
         N = 3  # skipped region from the reference
-        S = 4  # soft clipping (clipped sequences present inSEQ)
-        H = 5  # hard clipping (clipped sequences NOT present inSEQ)
+        S = 4  # soft clipping (clipped sequences present in SEQ)
+        H = 5  # hard clipping (clipped sequences NOT present in SEQ)
         P = 6  # padding (silent deletion from padded reference)
         E = 7  # sequence match (this is = in sam format)
         X = 8  # sequence mismatch
@@ -47,8 +47,8 @@ class CIGAR(metaclass=Frozen):
 
     CONSUMES_QUERY = (True, True, False, False, True, False, False, True, True, False, False)
     CONSUMES_REFER = (True, False, True, True, False, False, False, True, True, False, False)
-    CONSUMES_BOTH2 = (True, False, False, False, False, False, False, True, True, False, False)
-    ALIGN_RELEVANT = (True, True, True, True, True, False, False, True, True, False, False)
+    CONSUMES_BOTH = (True, False, False, False, False, False, False, True, True, False, False)
+    CONSUME_EITHER = (True, True, True, True, True, False, False, True, True, False, False)
 
     PATTERN = re.compile(r'(\d+)([MIDNSHPEX])')
 
@@ -68,16 +68,24 @@ class CIGAR(metaclass=Frozen):
 class Cigarette(RedBlackIntervalTreeNode, Immutable):
     def __init__(self, start: int, stop: int, zeronate: Zeronate, cigarOperation: CIGAR.OPERATION):
         """
-        A RedBlackIntervalTreeNode representing a single alignment-relevant CIGAR CODE unit
-        . It holds the start, stop on the read and
-        the aligned coordinates on the reference genome, as well as the CIGAR CODE.
+        A RedBlackIntervalTreeNode representing a single CIGAR OPERATION unit.
+        * start and stop are the 0-based positions on the source sequence (start must < stop)
+        * zeronate is the the Zeronate on the target sequence where the [start,stop) source sequence aligned.
+        * cigarOperation: is the CIGAR operation code.
 
-        It can be used in a RedBlackIntervalTree.
+        NOTE: Cigarette can represent the mapping of read to reference genome and reference genome to read.
+        * For read to reference: the read (aka query) is the source. The start and stop are positions on
+        the read, and Zeronate is the aligned coordinate on the reference genome. The CIGAR operation should be the
+        ones that consumes the query.
+        * For reference to read: the reference genome is the source, The start and stop are positions on the genome,
+        and Zeronate is the aligned coordinate on the read (aka query). The CIGAR operation should be the ones that
+        consumes the reference. Notice since the aligned genome can be on the reverse strand, you can convert this
+        alignment to the forward strand and zeronate represent an imaginary reverse strand of the read.
 
         This class objects are immutable at the python level.
-        :param start: the start position of the alignment on the query sequence (0-based)
-        :param stop: the stop position of the alignment on the query sequence (0-based)
-        :param zeronate: the aligned Zeronate on the reference genome.
+        :param start: the start position of the alignment on the source sequence (0-based)
+        :param stop: the stop position of the alignment on the source sequence (0-based)
+        :param zeronate: the aligned Zeronate on the target sequence.
         :param cigarOperation: the cigar operation code
         """
 
@@ -85,10 +93,10 @@ class Cigarette(RedBlackIntervalTreeNode, Immutable):
         self.zeronate = zeronate
         self.cigarOperation = cigarOperation
 
-    def map(self, zeroBasedPositionOnQuery: int) -> tp.Optional[Zeronate]:
+    def map(self, zeroBasedPosition: int) -> tp.Optional[Zeronate]:
         """
-        Map a base of the query to the aligned reference position.
-        The query position should be 0-based. 0-based coordinates perfectly represents the boundaries
+        Map a base of the source sequence to the aligned target base.
+        The query position should be 0-based, indicating the base [position, position+1).
         The returned Zeronate's start and stop always enclose the mapped base between start and stop.
         This is to avoid DNA reverse strand coordinate confusions (the string slicing go backwards).
 
@@ -101,15 +109,15 @@ class Cigarette(RedBlackIntervalTreeNode, Immutable):
         reverse stand   0<----------*--------- 20
                           <=========? 0  query2 aligned to some_chr:1_11,-
 
-        :param zeroBasedPositionOnQuery: 0-based query position
+        :param zeroBasedPosition: 0-based query position
         :return: Zeronate of the the aligned reference position or None if not aligned on reference
         """
-        if CIGAR.CONSUMES_BOTH2[self.cigarOperation]:
+        if CIGAR.CONSUMES_BOTH[self.cigarOperation]:
             if self.zeronate.reverseStrand:
-                mapped = self.zeronate.stop - (zeroBasedPositionOnQuery - self.start)
+                mapped = self.zeronate.stop - (zeroBasedPosition - self.start)
                 return Zeronate(self.zeronate.chr, mapped - 1, mapped, self.zeronate.reverseStrand)
             else:
-                mapped = self.zeronate.start + (zeroBasedPositionOnQuery - self.start)
+                mapped = self.zeronate.start + (zeroBasedPosition - self.start)
                 return Zeronate(self.zeronate.chr, mapped, mapped + 1, self.zeronate.reverseStrand)
 
         return None

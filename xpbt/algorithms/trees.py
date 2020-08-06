@@ -42,7 +42,7 @@ class RedBlackIntervalTree(xpbt.core.RedBlackIntervalTree):
         # 2. the value holds the reference of the given node in python, so python always take control of the lifetime
         #    of the node object
         # otherwise object pointer passed to c++ will be cleared by python if no python variables hold the object
-        self._address_map = dict()
+        self.__address_map = dict()
 
     def insert(self, node: RedBlackIntervalTreeNode):
         """
@@ -50,7 +50,7 @@ class RedBlackIntervalTree(xpbt.core.RedBlackIntervalTree):
         :param node: A RedBlackIntervalTreeNode or its subclass object.
         :return: None
         """
-        self._address_map[node.getAddress()] = node
+        self.__address_map[node.getAddress()] = node
         super(RedBlackIntervalTree, self).insert(node)
 
     def search(self, value: int) -> list:
@@ -61,4 +61,4 @@ class RedBlackIntervalTree(xpbt.core.RedBlackIntervalTree):
         """
         result = RedBlackIntervalTreeNodeVector()
         super(RedBlackIntervalTree, self).search(value, result)
-        return [self._address_map[node.getAddress()] for node in result]
+        return [self.__address_map[node.getAddress()] for node in result]

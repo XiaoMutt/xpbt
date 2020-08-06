@@ -104,6 +104,10 @@ A class holding critical information about CIGAR
 Backed up by a RedBlackIntervalTree, it holds aligned segments of a read (query), and allows fast mapping of the base 
 on the read (query) to the reference (the genome that the read aligned to).
 
+### AlignedReference
+Backed up by a RedBlackIntervalTree, it holds aligned segments that aligned to a specific reference, 
+and allows fast mapping of the base on the reference to the reads.
+
 ### Proposed
 - Distance::levenshtein
 

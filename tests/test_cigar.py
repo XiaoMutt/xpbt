@@ -15,10 +15,10 @@ class TestCigar(TestCase):
         with self.assertRaises(Exception):
             CIGAR.CONSUMES_REFER = False
 
-        self.assertEqual(CIGAR.ALIGN_RELEVANT,
+        self.assertEqual(CIGAR.CONSUME_EITHER,
                          tuple([a or b for a, b in zip(CIGAR.CONSUMES_QUERY, CIGAR.CONSUMES_REFER)]))
 
-        self.assertEqual(CIGAR.CONSUMES_BOTH2,
+        self.assertEqual(CIGAR.CONSUMES_BOTH,
                          tuple([a and b for a, b in zip(CIGAR.CONSUMES_QUERY, CIGAR.CONSUMES_REFER)]))
 
     def test_cigar_string2tuple(self):
