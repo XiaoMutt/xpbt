@@ -83,7 +83,7 @@ A class holds methods for DNA and RNA sequences.
 A class holds method for calculating distances between strings
 
 ### FastQIntegrator
-An Integrator to combine FastQ's belongs to the same initial DNA molecule.
+An Integrator to combine FastQ's belongs to the same initial DNA molecule (merge the sequence and quality).
 
 ### RedBlackIntervalTree
 A RedBlackIntervalTree for fast interval search.
@@ -105,8 +105,11 @@ Backed up by a RedBlackIntervalTree, it holds aligned segments of a read (query)
 on the read (query) to the reference (the genome that the read aligned to).
 
 ### AlignedReference
-Backed up by a RedBlackIntervalTree, it holds aligned segments that aligned to a specific reference, 
-and allows fast mapping of the base on the reference to the reads.
+Backed up by a RedBlackIntervalTree, it holds aligned read segments that aligned to a specific reference, 
+and allows fast mapping of the base on the reference back to the reads.
+
+### ReservoirSampler
+A sampler performs reservoir sampling.
 
 ### Proposed
 - Distance::levenshtein
