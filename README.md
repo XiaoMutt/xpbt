@@ -80,7 +80,9 @@ A Bloom filter for DNA Kmers.
 A class holds methods for DNA and RNA sequences.
 
 ### Distance
-A class holds method for calculating distances between strings
+A class holds method for calculating distances between strings:
+- hamming distance
+- levenshtein distance
 
 ### FastQIntegrator
 An Integrator to combine FastQ's belongs to the same initial DNA molecule (merge the sequence and quality).
@@ -110,10 +112,6 @@ and allows fast mapping of the base on the reference back to the reads.
 
 ### ReservoirSampler
 A sampler performs reservoir sampling.
-
-### Proposed
-- Distance::levenshtein
-
 
 
 
