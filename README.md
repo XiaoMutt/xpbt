@@ -1,4 +1,4 @@
-# xpbt (xiao's pragmatic biological tools)
+# xpbt (xiao's practical biological tools)
 The xpbt is a package of tools that can be used to solve biological problems. 
 The package is written in C++ and interfaced with Python using SWIG, balancing between high-performance and feasibility. 
 It contains modules and classes that can be directly used in Python scripts in a native way, instead of calling through 
